@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+    face-detection-server:
+        container_name: server
+        build: ./
+        working_dir: /usr/src/face-detection/server
+        command: npm start
+        environment:
+            POSTGRES_URI: postgres://username:password@postgres:5432/face-detection
+            CLARIFAI_API: api_key
+        links:
+            - postgres
+        ports:
+            - 8000:8000
+        volumes:
+            - ./:/usr/src/face-detection/server
+
+    postgres:
+        container_name: postgres
+        build: ./postgres
+        environment:
+            POSTGRES_USER: username
+            POSTGRES_PASSWORD: password
+            POSTGRES_DB: face-detection
+            POSTGRES_HOST: postgres
+        ports:
+            - 5432:5432
